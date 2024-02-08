@@ -1,0 +1,72 @@
+{% extends "Base.twig" %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center">Jouer</h2>
+        </div>
+    </div>
+    <div class="row mt-3">
+        {% if message is defined %}
+            <div class="col-12 alert alert-{{ message.type }} alert-dismissible fade show" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <div class="alert-message">
+                    {{ message.mess|raw }}
+                </div>
+            </div>
+        {% endif %}
+        <div class="col-6">
+            <table class="table">
+                <thead>
+                    <tr>
+                    <th colspan="2">Choisir un personnage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in listAllPlayers %}
+                        <tr>
+                            <td>{{ player.id }}</td>
+                            <td><a href="{{ pathRoot ~ 'jouer/utiliser/id/' ~ player.id }}">{{ player.nom }}</a></td>
+                        </tr>    
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-6">
+            {% if persoToPlay is defined %}
+            <div class="card mt-3">
+                <div class="card-header">Information joueur</div>
+                <div class="card-body">
+                    <p>Nom : <b>{{ persoToPlay.getNom }}</b></p>
+                    <p>Dégats : {{ persoToPlay.getDegats }}</p>
+                    <p>Expérience : {{ persoToPlay.getExperience }} ({{ persoToPlay.getLimitExp }})</p>
+                    <p>Niveau : {{ persoToPlay.getNiveau }}</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% if listPersoToHit is defined %}
+    <div class="row">
+        <div class="col-6">
+            <div class="mess-action-canva alert alert-success alert-dismissible fade show" style="display:none" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <div class="mess-action"></div>
+            </div>
+            <div class="card mt-3">
+                <div class="card-header">Qui frapper</div>
+                <div class="card-body" data-url="{{ pathRoot ~ 'jouer/frapper/' }}">
+                {% for cle, persoToHit in listPersoToHit %}
+                    <a class="persoHit" href="javascript: void 0" data-id="{{ persoToHit.getId }}" >{{ persoToHit.getNom }}</a> ( dégâts : <span id="degats-perso-{{ persoToHit.getId }}">{{ persoToHit.getDegats }}</span>, expériences : {{ persoToHit.getExperience }} )<br/>
+                {% endfor %}
+                </div>
+            </div>
+
+        </div>
+        <div class="col-6">
+
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}    

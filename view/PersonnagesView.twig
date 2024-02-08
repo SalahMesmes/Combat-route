@@ -1,0 +1,50 @@
+{% extends "Base.twig" %}
+
+{% block body %}
+<div class="row mt-3">
+    {% if message is defined %} 
+        <div class="col-12 alert alert-{{ message.type }} alert-dismissible fade show" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="alert-message">
+                {{ message.mess }}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="col-6">
+        <h5>Liste des personnages</h5>
+        <table class="table">
+            <thead>
+                <tr>
+                <th scope="col">#</th>
+                <th scope="col">Suppr.</th>
+                <th scope="col">Perso.</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for player in listAllPlayers %}
+                    <tr>
+                        <td>{{ player.id }}</td>
+                        <td><a href="{{ pathRoot ~ 'personnages/delete/id/' ~ player.id }}">X</a></td>
+                        <td><a href="{{ pathRoot ~ 'personnages/update/id/' ~ player.id }}">{{ player.nom }}</a></td>
+                    </tr>    
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-6">
+        <h5>Ajouter ou modifier un personnage</h5>
+        {% set nomAModifier = nom is defined ? nom : '' %}
+        {% set action = idPlayer is defined  ? 'updateValide' : 'create' %}
+        <form class="row" action="{{ pathRoot ~ 'personnages/' ~ action ~ '/id/' ~ idPlayer }}" method="post">
+            <div class="col-auto">
+            <input type="text" class="form-control" name="nom" placeholder="Entrer un nom" value="{{ nomAModifier }}" />
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary mb-3" name="ok">OK</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
